@@ -19,6 +19,7 @@ python3 tests/e2e/arithmetic_sequence/rl/main_trainer.py \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=200 \
     actor_rollout_ref.actor.entropy_coeff=0 \
     actor_rollout_ref.actor.optim.lr=1e-4 \
+    actor_rollout_ref.actor.global_kl.enable=True \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=200 \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=200 \
     actor_rollout_ref.rollout.name=hf \
@@ -26,7 +27,8 @@ python3 tests/e2e/arithmetic_sequence/rl/main_trainer.py \
     critic.ppo_micro_batch_size_per_gpu=200 \
     critic.model.path=tests/e2e/arithmetic_sequence/model \
     critic.optim.lr=1e-3 \
-    algorithm.kl_ctrl.kl_coef=0.005 \
+    algorithm.in_reward_kl.enable=True \
+    algorithm.in_reward_kl.kl_ctrl.kl_coef=0.005 \
     trainer.total_epochs=200 \
     trainer.experiment_name=arithmetic_sequences \
     trainer.logger=['console'] \

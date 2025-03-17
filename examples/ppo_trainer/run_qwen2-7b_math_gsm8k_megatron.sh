@@ -31,7 +31,7 @@ python3 -m verl.trainer.main_ppo --config-path=./config --config-name='ppo_megat
     critic.model.path=Qwen/Qwen2-7B-Instruct \
     critic.model.enable_gradient_checkpointing=False \
     critic.ppo_micro_batch_size_per_gpu=4 \
-    algorithm.kl_ctrl.kl_coef=0.001 \
+    algorithm.in_reward_kl.enable=True \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_megatron_math_gsm8k_examples' \

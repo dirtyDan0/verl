@@ -88,7 +88,7 @@ PYTHONUNBUFFERED=1 srun --overlap --nodes=1 --ntasks=1 -w "$head_node" \
     critic.optim.lr=1e-5 \
     critic.model.path=Qwen/Qwen2.5-0.5B-Instruct \
     critic.ppo_micro_batch_size_per_gpu=4 \
-    algorithm.kl_ctrl.kl_coef=0.001 \
+    algorithm.in_reward_kl.enable=True \
     trainer.logger=['console'] \
     +trainer.val_before_train=False \
     trainer.default_hdfs_dir=null \

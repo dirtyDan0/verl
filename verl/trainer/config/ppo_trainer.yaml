@@ -32,10 +32,11 @@ actor_rollout_ref:
     grad_clip: 1.0
     clip_ratio: 0.2
     entropy_coeff: 0.001
-    use_kl_loss: False # True for GRPO
     use_torch_compile: True # False to disable torch compile
-    kl_loss_coef: 0.001 # for grpo
-    kl_loss_type: low_var_kl # for grpo
+    global_kl:
+      enable: False # use global kl loss
+      kl_loss_type: low_var_kl  # how to estimate kl divergence
+      kl_loss_coef: 0.001
     ppo_epochs: 1
     shuffle: False
     ulysses_sequence_parallel_size: 1 # sp size
@@ -54,6 +55,7 @@ actor_rollout_ref:
       optimizer_offload: False
       fsdp_size: -1
   ref:
+    enable: True
     fsdp_config:
       param_offload: False
       wrap_policy:
@@ -166,10 +168,14 @@ algorithm:
   gamma: 1.0
   lam: 1.0
   adv_estimator: gae
-  kl_penalty: kl  # how to estimate kl divergence
-  kl_ctrl:
-    type: fixed
-    kl_coef: 0.001
+  in_reward_kl:
+    enable: False
+    kl_type: kl  # how to estimate kl divergence
+    kl_ctrl:
+      type: fixed
+      kl_coef: 0.001
+      horizon: 10000
+      target_kl: 0.1
 
 trainer:
   balance_batch: True

@@ -29,7 +29,8 @@ python3 -m verl.trainer.main_ppo \
     critic.ppo_micro_batch_size_per_gpu=32 \
     critic.model.fsdp_config.param_offload=False \
     critic.model.fsdp_config.optimizer_offload=False \
-    algorithm.kl_ctrl.kl_coef=0.001 \
+    algorithm.in_reward_kl.enable=True \
+    algorithm.in_reward_kl.kl_ctrl.kl_coef=0.001 \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_example_gsm8k' \

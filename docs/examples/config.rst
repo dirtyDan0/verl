@@ -83,10 +83,11 @@ Actor/Rollout/Reference Policy
       grad_clip: 1.0
       clip_ratio: 0.2
       entropy_coeff: 0.001
-      use_kl_loss: False # True for GRPO
       use_torch_compile: True # False to disable torch compile
-      kl_loss_coef: 0.001 # for grpo
-      kl_loss_type: low_var_kl # for grpo
+      global_kl:
+        enable: False # use global kl loss
+        kl_loss_type: low_var_kl  # how to estimate kl divergence
+        kl_loss_coef: 0.001
       ppo_epochs: 1
       shuffle: False
       ulysses_sequence_parallel_size: 1 # sp size
@@ -105,6 +106,7 @@ Actor/Rollout/Reference Policy
         optimizer_offload: False
         fsdp_size: -1
     ref:
+      enable: True
       fsdp_config:
         param_offload: False
         wrap_policy:
@@ -204,11 +206,21 @@ Actor/Rollout/Reference Policy
 
     - Trading speed for GPU memory.
 
+- ``actor_rollout_ref.actor.global_kl``: Config for global kl loss
+
+  - ``enable``: Whether to use global kl loss. Default is False. When set True, ``ref.enable`` must be True
+  - ``kl_loss_type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to calculate the kl divergence between actor and reference policy. For
+    specific options, refer to `core_algos.py <https://github.com/volcengine/verl/blob/main/verl/trainer/ppo/core_algos.py#L192>`_ .
+  - ``kl_loss_coef``: The coefficient of global kl loss. Default is 0.001.
+
+
 **Reference Model**
 
 - ``actor_rollout_ref.ref``: FSDP config same as actor. **For models
   larger than 7B, it's recommended to turn on offload for ref by
   default**
+
+- ``actor_rollout_ref.ref.enable``: Whether to enable reference model. Default is True. Notice that if ``actor_rollout_ref.ref.enable`` is True, you must set ``actor.global_kl.enable`` or/and ``algorithm.in_reward_kl.enable`` as True.
 
 - ``actor_rollout_ref.ref.log_prob_micro_batch_size``: [Will be deprecate, use log_prob_micro_batch_size_per_gpu]
   The batch size for one forward pass in the computation of ``ref_log_prob``. The value represent the global num.
@@ -320,7 +332,7 @@ Reward Model
     their own RewardModelWorker and pass it from the code.
 - ``reward_model.reward_manager``:  Reward Manager. This defines the mechanism
   of computing rule-based reward and handling different reward sources. Default
-  if ``naive``. If all verification functions are multiprocessing-safe, the reward
+  is ``naive``. If all verification functions are multiprocessing-safe, the reward
   manager can be set to ``prime`` for parallel verification.
 
 Customized Reward Function
@@ -344,17 +356,30 @@ Algorithm
      gamma: 1.0
      lam: 1.0
      adv_estimator: gae
-     kl_penalty: kl  # how to estimate kl divergence
-     kl_ctrl:
-       type: fixed
-       kl_coef: 0.005
+     in_reward_kl:
+      enable: False
+      kl_type: kl  # how to estimate kl divergence
+      kl_ctrl:
+        type: fixed
+        kl_coef: 0.001
+        horizon: 10000
+        target_kl: 0.1
 
 - ``gemma``: discount factor
 - ``lam``: Trade-off between bias and variance in the GAE estimator
 - ``adv_estimator``: Support ``gae``, ``grpo``, ``reinforce_plus_plus``, ``rloo``
-- ``kl_penalty``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to
-  calculate the kl divergence between actor and reference policy. For
-  specific options, refer to `core_algos.py <https://github.com/volcengine/verl/blob/main/verl/trainer/ppo/core_algos.py#L192>`_ .
+- ``in_reward_kl``: Config for in-reward kl_penalty
+  - ``enable``: Whether to enable in-reward kl_penalty. Default is False.
+
+  - ``kl_type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to
+    calculate the kl divergence between actor and reference policy. For
+    specific options, refer to `core_algos.py <https://github.com/volcengine/verl/blob/main/verl/trainer/ppo/core_algos.py#L192>`_ .
+
+  - ``kl_ctrl``: Config for FixedKLController or AdaptiveKLController
+
+    - ``type``: 'fixed' for FixedKLController and 'adaptive' for AdaptiveKLController
+    - ``kl_coef``: The coefficient of in-reward kl_penalty
+    - ``horizon`` and ``target_kl``: See source code of AdaptiveKLController for details.
 
 Trainer
 ~~~~~~~

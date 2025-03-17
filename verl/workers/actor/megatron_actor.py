@@ -223,7 +223,7 @@ class MegatronPPOActor(BasePPOActor):
 
         """
         select_keys = ['responses', 'input_ids', 'attention_mask', 'position_ids', 'old_log_probs', 'advantages']
-        if self.config.use_kl_loss:
+        if self.config.global_kl.enable:
             select_keys.append('ref_log_prob')
         data = data.select(batch_keys=select_keys)
         return data.make_iterator(mini_batch_size=self.config.ppo_mini_batch_size,
@@ -293,17 +293,17 @@ class MegatronPPOActor(BasePPOActor):
             policy_loss = pg_loss - entropy_loss * entropy_coeff
 
             metrics = {}
-            if self.config.use_kl_loss:
+            if self.config.global_kl.enable:
                 ref_log_prob = data['ref_log_prob']
                 # compute kl loss
                 kld = core_algos.kl_penalty(logprob=log_prob,
                                             ref_logprob=ref_log_prob,
-                                            kl_penalty=self.config.kl_loss_type)
+                                            kl_type=self.config.global_kl.kl_loss_type)
                 kl_loss = masked_mean(kld, response_mask)
 
-                policy_loss = policy_loss + kl_loss * self.config.kl_loss_coef
+                policy_loss = policy_loss + kl_loss * self.config.global_kl.kl_loss_coef
                 metrics['actor/kl_loss'] = kl_loss.detach().item()
-                metrics['actor/kl_coef'] = self.config.kl_loss_coef
+                metrics['actor/kl_coef'] = self.config.global_kl.kl_loss_coef
 
             # return loss and stats
             stats = {

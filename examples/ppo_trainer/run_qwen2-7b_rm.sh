@@ -59,7 +59,7 @@ python3 -m verl.trainer.main_ppo \
     reward_model.model.use_remove_padding=True \
     reward_model.model.fsdp_config.param_offload=True \
     reward_model.micro_batch_size_per_gpu=32 \
-    algorithm.kl_ctrl.kl_coef=0.001 \
+    algorithm.in_reward_kl.enable=True \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_example' \

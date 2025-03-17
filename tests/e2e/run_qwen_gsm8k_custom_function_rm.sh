@@ -28,6 +28,7 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.actor.fsdp_config.param_offload=False \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
+    actor_rollout_ref.actor.global_kl.enable=True \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=16 \
     actor_rollout_ref.rollout.tensor_model_parallel_size=2 \
     actor_rollout_ref.rollout.name=vllm \
@@ -41,7 +42,6 @@ python3 -m verl.trainer.main_ppo \
     critic.ppo_micro_batch_size_per_gpu=4 \
     critic.model.fsdp_config.param_offload=False \
     critic.model.fsdp_config.optimizer_offload=False \
-    algorithm.kl_ctrl.kl_coef=0.001 \
     custom_reward_function.path=$FILE\
     custom_reward_function.name=$FUNCTION_NAME\
     trainer.critic_warmup=0 \
