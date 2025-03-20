@@ -15,7 +15,6 @@ python3 -m verl.trainer.main_ppo --config-path=./config --config-name='ppo_megat
     actor_rollout_ref.actor.optim.lr=1e-6 \
     actor_rollout_ref.actor.ppo_mini_batch_size=128 \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
-    actor_rollout_ref.actor.kl_loss.enable=True \
     actor_rollout_ref.actor.kl_loss.type=low_var_kl \
     actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=4 \
@@ -34,10 +33,9 @@ python3 -m verl.trainer.main_ppo --config-path=./config --config-name='ppo_megat
     reward_model.model.path=deepseek-ai/deepseek-llm-7b-chat \
     reward_model.micro_batch_size_per_gpu=4 \
     reward_model.param_offload=False \
-    algorithm.in_reward_kl.enable=True \
     algorithm.in_reward_kl.type=kl \
     algorithm.in_reward_kl.kl_ctrl.type=fixed \
-    algorithm.in_reward_kl.kl_ctrl.coef=0.001 \
+    algorithm.in_reward_kl.coef=0.001 \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_megatron_full_hh_rlhf_examples' \

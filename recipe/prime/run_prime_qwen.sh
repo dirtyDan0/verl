@@ -32,7 +32,6 @@ python3 -m recipe.prime.main_prime \
     actor_rollout_ref.model.enable_gradient_checkpointing=True \
     actor_rollout_ref.actor.fsdp_config.param_offload=True \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=True \
-    actor_rollout_ref.actor.kl_loss.enable=True \
     actor_rollout_ref.actor.kl_loss.type=low_var_kl \
     actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=32 \
@@ -43,7 +42,7 @@ python3 -m recipe.prime.main_prime \
     actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=32 \
     algorithm.adv_estimator=rloo \
-    algorithm.in_reward_kl.enable=False \
+    algorithm.in_reward_kl.coef=0 \
     reward_model.model.path=$model_path \
     reward_model.micro_batch_size=8 \
     reward_model.model.update=before \

@@ -54,12 +54,12 @@ class FixedKLController:
 
 
 def get_kl_controller(kl_config):
-    if kl_config.enable:
+    if kl_config.coef>1e-6:
         if kl_config.kl_ctrl.type == 'fixed':
-            return FixedKLController(kl_coef=kl_config.kl_ctrl.coef)
+            return FixedKLController(kl_coef=kl_config.coef)
         elif kl_config.kl_ctrl.type == 'adaptive':
             assert kl_config.kl_ctrl.horizon > 0, f'horizon must be larger than 0. Got {kl_config.kl_ctrl.horizon}'
-            return AdaptiveKLController(init_kl_coef=kl_config.kl_ctrl.coef,
+            return AdaptiveKLController(init_kl_coef=kl_config.coef,
                                         target_kl=kl_config.kl_ctrl.target_kl,
                                         horizon=kl_config.kl_ctrl.horizon)
         else:

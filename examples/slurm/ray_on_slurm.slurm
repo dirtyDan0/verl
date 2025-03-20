@@ -81,7 +81,6 @@ PYTHONUNBUFFERED=1 srun --overlap --nodes=1 --ntasks=1 -w "$head_node" \
     actor_rollout_ref.actor.optim.lr=1e-6 \
     actor_rollout_ref.actor.ppo_mini_batch_size=64 \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
-    actor_rollout_ref.actor.kl_loss.enable=True \
     actor_rollout_ref.actor.kl_loss.type=low_var_kl \
     actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=8 \
@@ -89,14 +88,12 @@ PYTHONUNBUFFERED=1 srun --overlap --nodes=1 --ntasks=1 -w "$head_node" \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.4 \
     actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=4 \
-    algorithm.in_reward_kl.enable=True \
     algorithm.in_reward_kl.type=kl \
     algorithm.in_reward_kl.kl_ctrl.type=fixed \
-    algorithm.in_reward_kl.kl_ctrl.coef=0.001 \
+    algorithm.in_reward_kl.coef=0.001 \
     critic.optim.lr=1e-5 \
     critic.model.path=Qwen/Qwen2.5-0.5B-Instruct \
     critic.ppo_micro_batch_size_per_gpu=4 \
-    algorithm.in_reward_kl.enable=True \
     trainer.logger=['console'] \
     +trainer.val_before_train=False \
     trainer.default_hdfs_dir=null \

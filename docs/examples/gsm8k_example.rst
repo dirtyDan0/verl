@@ -142,7 +142,6 @@ The script of run_deepseek7b_llm.sh
       actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=16 \
       actor_rollout_ref.actor.fsdp_config.param_offload=False \
       actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
-      actor_rollout_ref.actor.kl_loss.enable=True \
       actor_rollout_ref.actor.kl_loss.type=low_var_kl \
       actor_rollout_ref.actor.kl_loss.coef=0.001 \
       actor_rollout_ref.model.enable_gradient_checkpointing=True \
@@ -153,10 +152,9 @@ The script of run_deepseek7b_llm.sh
       actor_rollout_ref.ref.enable=True \
       actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=32 \
       actor_rollout_ref.ref.fsdp_config.param_offload=True \
-      algorithm.in_reward_kl.enable=True \
       algorithm.in_reward_kl.type=kl \
       algorithm.in_reward_kl.kl_ctrl.type=fixed \
-      algorithm.in_reward_kl.kl_ctrl.coef=0.001 \
+      algorithm.in_reward_kl.coef=0.001 \
       critic.optim.lr=1e-5 \
       critic.model.use_remove_padding=True \
       critic.model.path=deepseek-ai/deepseek-llm-7b-chat \

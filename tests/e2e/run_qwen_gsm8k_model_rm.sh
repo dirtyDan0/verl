@@ -17,7 +17,6 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.actor.fsdp_config.param_offload=False \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
-    actor_rollout_ref.actor.kl_loss.enable=True \
     actor_rollout_ref.actor.kl_loss.type=low_var_kl \
     actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=16 \
@@ -40,7 +39,7 @@ python3 -m verl.trainer.main_ppo \
     reward_model.model.use_remove_padding=True \
     reward_model.model.fsdp_config.param_offload=True \
     reward_model.micro_batch_size_per_gpu=16 \
-    algorithm.in_reward_kl.enable=False \
+    algorithm.in_reward_kl.coef=0 \
     trainer.critic_warmup=0 \
     trainer.logger=['console'] \
     +trainer.val_before_train=False \

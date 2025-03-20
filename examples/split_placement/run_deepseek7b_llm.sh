@@ -14,7 +14,6 @@ python3 main_ppo_split.py \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=8 \
     actor_rollout_ref.actor.fsdp_config.param_offload=False \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
-    actor_rollout_ref.actor.kl_loss.enable=True \
     actor_rollout_ref.actor.kl_loss.type=low_var_kl \
     actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=8 \
@@ -30,10 +29,9 @@ python3 main_ppo_split.py \
     critic.ppo_micro_batch_size_per_gpu=8 \
     critic.model.fsdp_config.param_offload=False \
     critic.model.fsdp_config.optimizer_offload=False \
-    algorithm.in_reward_kl.enable=True \
     algorithm.in_reward_kl.type=kl \
     algorithm.in_reward_kl.kl_ctrl.type=fixed \
-    algorithm.in_reward_kl.kl_ctrl.coef=0.001 \
+    algorithm.in_reward_kl.coef=0.001 \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_example_gsm8k' \
