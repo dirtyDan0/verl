@@ -181,7 +181,7 @@ To extend to other RLHF algorithms, such as DPO, GRPO, please refer to
                    # compute rewards. apply_in_reward_kl_penalty if available
                    batch, kl_metrics = apply_in_reward_kl_penalty(batch,
                                                         kl_ctrl=self.kl_ctrl_in_reward,
-                                                        kl_type=self.config.algorithm.in_reward_kl.kl_type)
+                                                        kl_type=self.config.algorithm.in_reward_kl.type)
                    metrics.update(kl_metrics)
 
                    # compute advantages, executed on the driver process

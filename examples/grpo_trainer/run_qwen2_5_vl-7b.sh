@@ -20,7 +20,9 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.model.enable_gradient_checkpointing=True \
     actor_rollout_ref.actor.fsdp_config.param_offload=False \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
-    actor_rollout_ref.actor.global_kl.enable=True \
+    actor_rollout_ref.actor.kl_loss.enable=True \
+    actor_rollout_ref.actor.kl_loss.type=low_var_kl \
+    actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=20 \
     actor_rollout_ref.rollout.tensor_model_parallel_size=2 \
     actor_rollout_ref.rollout.name=vllm \
@@ -29,8 +31,10 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.enforce_eager=False \
     actor_rollout_ref.rollout.free_cache_engine=False \
     actor_rollout_ref.rollout.n=5 \
+    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=20 \
     actor_rollout_ref.ref.fsdp_config.param_offload=True \
+    algorithm.in_reward_kl.enable=False \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_grpo_example_geo3k' \

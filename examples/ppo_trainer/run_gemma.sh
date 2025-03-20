@@ -15,10 +15,14 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.actor.fsdp_config.param_offload=False \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
+    actor_rollout_ref.actor.kl_loss.enable=True \
+    actor_rollout_ref.actor.kl_loss.type=low_var_kl \
+    actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.rollout.tensor_model_parallel_size=2 \
     actor_rollout_ref.rollout.name=vllm \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.4 \
+    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=4 \
     actor_rollout_ref.ref.fsdp_config.param_offload=True \
     critic.optim.lr=1e-5 \
@@ -29,7 +33,9 @@ python3 -m verl.trainer.main_ppo \
     critic.model.fsdp_config.param_offload=False \
     critic.model.fsdp_config.optimizer_offload=False \
     algorithm.in_reward_kl.enable=True \
-    algorithm.in_reward_kl.kl_ctrl.kl_coef=0.001 \
+    algorithm.in_reward_kl.type=kl \
+    algorithm.in_reward_kl.kl_ctrl.type=fixed \
+    algorithm.in_reward_kl.kl_ctrl.coef=0.001 \
     trainer.critic_warmup=0 \
     trainer.logger=['console','wandb'] \
     trainer.project_name='verl_example' \

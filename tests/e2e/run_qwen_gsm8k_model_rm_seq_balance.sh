@@ -18,11 +18,14 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.actor.ppo_max_token_len_per_gpu=12000 \
     actor_rollout_ref.actor.fsdp_config.param_offload=False \
     actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
-    actor_rollout_ref.actor.global_kl.enable=True \
+    actor_rollout_ref.actor.kl_loss.enable=True \
+    actor_rollout_ref.actor.kl_loss.type=low_var_kl \
+    actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.tensor_model_parallel_size=2 \
     actor_rollout_ref.rollout.name=vllm \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.4 \
     actor_rollout_ref.rollout.log_prob_max_token_len_per_gpu=12000 \
+    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.fsdp_config.param_offload=True \
     actor_rollout_ref.ref.log_prob_max_token_len_per_gpu=12000 \
     critic.optim.lr=1e-5 \
@@ -40,6 +43,7 @@ python3 -m verl.trainer.main_ppo \
     reward_model.model.fsdp_config.param_offload=True \
     reward_model.use_dynamic_bsz=True \
     reward_model.forward_max_token_len_per_gpu=98304 \
+    algorithm.in_reward_kl.enable=False \
     trainer.critic_warmup=0 \
     trainer.logger=['console'] \
     +trainer.val_before_train=False \

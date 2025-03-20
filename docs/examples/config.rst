@@ -84,10 +84,10 @@ Actor/Rollout/Reference Policy
       clip_ratio: 0.2
       entropy_coeff: 0.001
       use_torch_compile: True # False to disable torch compile
-      global_kl:
-        enable: False # use global kl loss
-        kl_loss_type: low_var_kl  # how to estimate kl divergence
-        kl_loss_coef: 0.001
+      kl_loss:
+        enable: False 
+        type: low_var_kl  # how to estimate kl divergence
+        coef: 0.001
       ppo_epochs: 1
       shuffle: False
       ulysses_sequence_parallel_size: 1 # sp size
@@ -206,12 +206,12 @@ Actor/Rollout/Reference Policy
 
     - Trading speed for GPU memory.
 
-- ``actor_rollout_ref.actor.global_kl``: Config for global kl loss
+- ``actor_rollout_ref.actor.kl_loss``: Config for kl loss
 
-  - ``enable``: Whether to use global kl loss. Default is False. When set True, ``ref.enable`` must be True
-  - ``kl_loss_type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to calculate the kl divergence between actor and reference policy. For
+  - ``enable``: Whether to use kl loss. Default is False. When set True, ``ref.enable`` must be True
+  - ``type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to calculate the kl divergence between actor and reference policy. For
     specific options, refer to `core_algos.py <https://github.com/volcengine/verl/blob/main/verl/trainer/ppo/core_algos.py#L192>`_ .
-  - ``kl_loss_coef``: The coefficient of global kl loss. Default is 0.001.
+  - ``coef``: The coefficient of kl loss. Default is 0.001.
 
 
 **Reference Model**
@@ -220,7 +220,7 @@ Actor/Rollout/Reference Policy
   larger than 7B, it's recommended to turn on offload for ref by
   default**
 
-- ``actor_rollout_ref.ref.enable``: Whether to enable reference model. Default is True. Notice that if ``actor_rollout_ref.ref.enable`` is True, you must set ``actor.global_kl.enable`` or/and ``algorithm.in_reward_kl.enable`` as True.
+- ``actor_rollout_ref.ref.enable``: Whether to enable reference model. Default is True. Notice that if ``actor_rollout_ref.ref.enable`` is True, you must set ``actor.kl_loss.enable`` or/and ``algorithm.in_reward_kl.enable`` as True.
 
 - ``actor_rollout_ref.ref.log_prob_micro_batch_size``: [Will be deprecate, use log_prob_micro_batch_size_per_gpu]
   The batch size for one forward pass in the computation of ``ref_log_prob``. The value represent the global num.
@@ -358,10 +358,10 @@ Algorithm
      adv_estimator: gae
      in_reward_kl:
       enable: False
-      kl_type: kl  # how to estimate kl divergence
+      type: kl  # how to estimate kl divergence
       kl_ctrl:
         type: fixed
-        kl_coef: 0.001
+        coef: 0.001
         horizon: 10000
         target_kl: 0.1
 
@@ -371,14 +371,14 @@ Algorithm
 - ``in_reward_kl``: Config for in-reward kl_penalty
   - ``enable``: Whether to enable in-reward kl_penalty. Default is False.
 
-  - ``kl_type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to
+  - ``type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to
     calculate the kl divergence between actor and reference policy. For
     specific options, refer to `core_algos.py <https://github.com/volcengine/verl/blob/main/verl/trainer/ppo/core_algos.py#L192>`_ .
 
   - ``kl_ctrl``: Config for FixedKLController or AdaptiveKLController
 
     - ``type``: 'fixed' for FixedKLController and 'adaptive' for AdaptiveKLController
-    - ``kl_coef``: The coefficient of in-reward kl_penalty
+    - ``coef``: The coefficient of in-reward kl_penalty
     - ``horizon`` and ``target_kl``: See source code of AdaptiveKLController for details.
 
 Trainer

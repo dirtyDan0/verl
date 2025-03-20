@@ -133,8 +133,9 @@ def fit(self):
 
                     # compute rewards. apply_in_reward_kl_penalty if available
                     if self.config.algorithm.in_reward_kl.get('enable', False):
-                        batch, kl_metrics = apply_in_reward_kl_penalty(
-                            batch, kl_ctrl=self.kl_ctrl_in_reward, kl_type=self.config.algorithm.in_reward_kl.kl_type)
+                        batch, kl_metrics = apply_in_reward_kl_penalty(batch,
+                                                                       kl_ctrl=self.kl_ctrl_in_reward,
+                                                                       kl_type=self.config.algorithm.in_reward_kl.type)
                         metrics.update(kl_metrics)
                     else:
                         batch.batch['token_level_rewards'] = batch.batch['token_level_scores']

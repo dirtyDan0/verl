@@ -129,6 +129,10 @@ def main(config):
         Role.Critic: global_pool_id,
     }
 
+    if config.actor_rollout_ref.ref.enable:
+        role_worker_mapping[Role.RefPolicy] = ray.remote(ActorRolloutRefWorker)
+        mapping[Role.RefPolicy] = global_pool_id
+
     reward_fn = make_reward_function(tokenizer=tokenizer, num_examine=1)
 
     resource_pool_manager = ResourcePoolManager(resource_pool_spec=resource_pool_spec, mapping=mapping)

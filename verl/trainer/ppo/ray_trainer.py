@@ -280,7 +280,7 @@ class RayPPOTrainer(object):
         self.validation_generations_logger = ValidationGenerationsLogger()
 
         # define in-reward KL control
-        # global kl control currently not suppoorted
+        # kl loss control currently not suppoorted
         self.kl_ctrl_in_reward = core_algos.get_kl_controller(config.algorithm.in_reward_kl)
 
         if self.config.algorithm.adv_estimator == AdvantageEstimator.GAE:
@@ -371,14 +371,15 @@ class RayPPOTrainer(object):
                 assert config.actor_rollout_ref.actor.ppo_micro_batch_size * sp_size >= n_gpus
 
         if (not self.use_reference_policy) and (config.algorithm.in_reward_kl.enable or
-                                                config.actor_rollout_ref.actor.global_kl.enable):
+                                                config.actor_rollout_ref.actor.kl_loss.enable):
             raise ValueError(
-                f"When adopting in-reward or global kl, you must enable reference model: set config.ref.enable=True.")
+                f"When adopting in-reward kl penalty or kl loss, you must enable reference model: set config.ref.enable=True."
+            )
 
         if self.use_reference_policy and not (config.algorithm.in_reward_kl.enable or
-                                              config.actor_rollout_ref.actor.global_kl.enable):
+                                              config.actor_rollout_ref.actor.kl_loss.enable):
             raise ValueError(
-                f"You have enabled reference model, so you should enable at least one of following as True: actor.global_kl.enable, algorithm.in_reward_kl.enable."
+                f"You have enabled reference model, so you should enable at least one of following as True: actor.kl_loss.enable, algorithm.in_reward_kl.enable."
             )
 
         # critic
@@ -892,9 +893,7 @@ class RayPPOTrainer(object):
                         # compute rewards. apply_in_reward_kl_penalty if available
                         if self.config.algorithm.in_reward_kl.get('enable', False):
                             batch, kl_metrics = apply_in_reward_kl_penalty(
-                                batch,
-                                kl_ctrl=self.kl_ctrl_in_reward,
-                                kl_type=self.config.algorithm.in_reward_kl.kl_type)
+                                batch, kl_ctrl=self.kl_ctrl_in_reward, kl_type=self.config.algorithm.in_reward_kl.type)
                             metrics.update(kl_metrics)
                         else:
                             batch.batch['token_level_rewards'] = batch.batch['token_level_scores']
