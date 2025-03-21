@@ -97,7 +97,6 @@ You may set ``VERL_USE_MODELSCOPE=True`` to download models from modelscope inst
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=8 \
     actor_rollout_ref.rollout.tensor_model_parallel_size=1 \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.4 \
-    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=4 \
     algorithm.in_reward_kl.type=kl \
     algorithm.in_reward_kl.kl_ctrl.type=fixed \

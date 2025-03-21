@@ -149,7 +149,6 @@ The script of run_deepseek7b_llm.sh
       actor_rollout_ref.rollout.tensor_model_parallel_size=4 \
       actor_rollout_ref.rollout.name=vllm \
       actor_rollout_ref.rollout.gpu_memory_utilization=0.5 \
-      actor_rollout_ref.ref.enable=True \
       actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=32 \
       actor_rollout_ref.ref.fsdp_config.param_offload=True \
       algorithm.in_reward_kl.type=kl \

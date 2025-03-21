@@ -99,7 +99,7 @@ def main_task(config, compute_score=None):
     }
 
     #use reference model
-    if config.actor_rollout_ref.ref.enable:
+    if config.algorithm.in_reward_kl.coef > 1e-6 or config.actor_rollout_ref.actor.kl_loss.coef > 1e-6:
         role_worker_mapping[Role.RefPolicy] = ray.remote(ActorRolloutRefWorker)
         mapping[Role.RefPolicy] = global_pool_id
 

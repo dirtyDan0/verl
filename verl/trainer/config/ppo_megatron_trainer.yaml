@@ -50,7 +50,6 @@ actor_rollout_ref:
       seed: 1
     load_weight: True
   ref:
-    enable: True
     megatron:
       tensor_model_parallel_size: 4
       pipeline_model_parallel_size: 1
@@ -157,7 +156,6 @@ algorithm:
   lam: 1.0
   adv_estimator: gae
   in_reward_kl:
-    enable: False
     type: kl  # how to estimate kl divergence
     coef: 0
     kl_ctrl:

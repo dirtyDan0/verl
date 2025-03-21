@@ -39,7 +39,6 @@ python3 -m recipe.prime.main_prime \
     actor_rollout_ref.rollout.name=vllm \
     actor_rollout_ref.rollout.n=4 \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.6 \
-    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=32 \
     algorithm.adv_estimator=rloo \
     algorithm.in_reward_kl.coef=0 \

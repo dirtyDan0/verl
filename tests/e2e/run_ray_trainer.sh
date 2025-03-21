@@ -22,7 +22,6 @@ python3 tests/e2e/arithmetic_sequence/rl/main_trainer.py \
     actor_rollout_ref.actor.kl_loss.type=low_var_kl \
     actor_rollout_ref.actor.kl_loss.coef=0.001 \
     actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=200 \
-    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=200 \
     actor_rollout_ref.rollout.name=hf \
     actor_rollout_ref.rollout.tensor_model_parallel_size=1 \

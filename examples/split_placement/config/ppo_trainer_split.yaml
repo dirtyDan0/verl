@@ -50,7 +50,6 @@ actor_rollout_ref:
       optimizer_offload: False
       fsdp_size: -1
   ref:
-    enable: True
     fsdp_config:
       param_offload: False
       wrap_policy:
@@ -150,7 +149,6 @@ algorithm:
   lam: 1.0
   adv_estimator: gae
   in_reward_kl:
-    enable: False
     type: kl  # how to estimate kl divergence
     coef: 0
     kl_ctrl:

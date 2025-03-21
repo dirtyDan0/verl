@@ -142,7 +142,7 @@ def apply_in_reward_kl_penalty(data: DataProto, kl_ctrl: core_algos.AdaptiveKLCo
     response_mask = attention_mask[:, -response_length:]
 
     # compute kl between ref_policy and current policy
-    # When apply_in_reward_kl_penalty, algorithm.in_reward_kl>1e-6 and ref.enable is True
+    # When apply_in_reward_kl_penalty, algorithm.in_reward_kl>1e-6
     kld = core_algos.kl_penalty(data.batch['old_log_probs'], data.batch['ref_log_prob'],
                                 kl_type=kl_type)  # (batch_size, response_length)
     kld = kld * response_mask
@@ -370,17 +370,8 @@ class RayPPOTrainer(object):
                 assert config.actor_rollout_ref.actor.ppo_mini_batch_size % config.actor_rollout_ref.actor.ppo_micro_batch_size == 0
                 assert config.actor_rollout_ref.actor.ppo_micro_batch_size * sp_size >= n_gpus
 
-        if (not self.use_reference_policy) and (config.algorithm.in_reward_kl.coef > 1e-6 or
-                                                config.actor_rollout_ref.actor.kl_loss.coef > 1e-6):
-            raise ValueError(
-                f"When adopting in-reward kl penalty or kl loss, you must enable reference model: set config.ref.enable=True."
-            )
-
-        if self.use_reference_policy and not (config.algorithm.in_reward_kl.coef > 1e-6 or
-                                              config.actor_rollout_ref.actor.kl_loss.coef > 1e-6):
-            raise ValueError(
-                f"You have enabled reference model, so you should set at least one of following coefficient > 1e-6: actor.kl_loss.coef, algorithm.in_reward_kl.coef."
-            )
+        if (config.algorithm.in_reward_kl.coef > 1e-6 and config.actor_rollout_ref.actor.kl_loss.coef > 1e-6):
+            print(f"NOTICE: You have both enabled in-reward kl and kl loss.")
 
         # critic
         if self.use_critic and not config.critic.use_dynamic_bsz:
@@ -891,7 +882,7 @@ class RayPPOTrainer(object):
                         batch.batch['token_level_scores'] = reward_tensor
 
                         # compute rewards. apply_in_reward_kl_penalty if available
-                        if self.config.algorithm.in_reward_kl.get('enable', False):
+                        if self.config.algorithm.in_reward_kl.coef > 1e-6:
                             batch, kl_metrics = apply_in_reward_kl_penalty(
                                 batch, kl_ctrl=self.kl_ctrl_in_reward, kl_type=self.config.algorithm.in_reward_kl.type)
                             metrics.update(kl_metrics)

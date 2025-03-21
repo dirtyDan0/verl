@@ -26,7 +26,6 @@ python3 -m verl.trainer.main_ppo \
     actor_rollout_ref.rollout.name=vllm \
     actor_rollout_ref.rollout.gpu_memory_utilization=0.6 \
     actor_rollout_ref.rollout.n=5 \
-    actor_rollout_ref.ref.enable=True \
     actor_rollout_ref.ref.fsdp_config.param_offload=True \
     algorithm.in_reward_kl.coef=0 \
     trainer.critic_warmup=0 \

@@ -54,7 +54,7 @@ class FixedKLController:
 
 
 def get_kl_controller(kl_config):
-    if kl_config.coef>1e-6:
+    if kl_config.coef > 1e-6:
         if kl_config.kl_ctrl.type == 'fixed':
             return FixedKLController(kl_coef=kl_config.coef)
         elif kl_config.kl_ctrl.type == 'adaptive':

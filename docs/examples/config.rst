@@ -105,7 +105,6 @@ Actor/Rollout/Reference Policy
         optimizer_offload: False
         fsdp_size: -1
     ref:
-      enable: True
       fsdp_config:
         param_offload: False
         wrap_policy:
@@ -214,11 +213,11 @@ Actor/Rollout/Reference Policy
 
 **Reference Model**
 
+Reference model will be enabled when ``actor.kl_loss.coef`` or/and ``algorithm.in_reward_kl.coef`` \> 1e-6
+
 - ``actor_rollout_ref.ref``: FSDP config same as actor. **For models
   larger than 7B, it's recommended to turn on offload for ref by
   default**
-
-- ``actor_rollout_ref.ref.enable``: Whether to enable reference model. Default is True. Notice that if ``actor_rollout_ref.ref.enable`` is True, you must set ``actor.kl_loss.coef`` or/and ``algorithm.in_reward_kl.coef`` \> 1e-6.
 
 - ``actor_rollout_ref.ref.log_prob_micro_batch_size``: [Will be deprecate, use log_prob_micro_batch_size_per_gpu]
   The batch size for one forward pass in the computation of ``ref_log_prob``. The value represent the global num.
@@ -355,7 +354,6 @@ Algorithm
      lam: 1.0
      adv_estimator: gae
      in_reward_kl:
-      enable: False
       type: kl  # how to estimate kl divergence
       coef: 0
       kl_ctrl:
@@ -367,8 +365,6 @@ Algorithm
 - ``lam``: Trade-off between bias and variance in the GAE estimator
 - ``adv_estimator``: Support ``gae``, ``grpo``, ``reinforce_plus_plus``, ``rloo``
 - ``in_reward_kl``: Config for in-reward kl_penalty
-  - ``enable``: Whether to enable in-reward kl_penalty. Default is False.
-
   - ``type``: Support ``kl``, ``abs``, ``mse`` and ``full``. How to
     calculate the kl divergence between actor and reference policy. For
     specific options, refer to `core_algos.py <https://github.com/volcengine/verl/blob/main/verl/trainer/ppo/core_algos.py#L192>`_ .
